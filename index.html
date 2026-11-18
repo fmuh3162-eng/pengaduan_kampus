@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe Pengaduan Fasilitas Kampus (Revisi)</title>
+<style>
+  :root{--biru:#2c5a8c;--bar:#dce6f0;--garis:#888;--abu:#ececec;--teks:#222;--redup:#666;--merah:#b3261e;--oranye:#fde5d8;--hijau:#dff1e3}
+  *{box-sizing:border-box}
+  body{margin:0;padding:24px;background:#f3f4f6;font-family:Inter,"Segoe UI",Arial,sans-serif;color:var(--teks)}
+  .frame{max-width:960px;margin:0 auto;background:#fff;border:2px solid var(--teks);min-height:540px;position:relative}
+  .bar{background:var(--bar);border-bottom:2px solid var(--teks);padding:12px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:600}
+  .bar button{all:unset;cursor:pointer;font-weight:400}
+  .bar button:hover{text-decoration:underline}
+  .bar .kanan{display:flex;align-items:center;gap:16px;font-weight:400;font-size:14px}
+  #lonceng{position:relative;font-size:20px;line-height:1;text-decoration:none!important}
+  #lonceng .n{position:absolute;top:-7px;right:-10px;background:var(--merah);color:#fff;font-size:11px;min-width:17px;height:17px;border-radius:9px;text-align:center;line-height:17px;font-weight:600}
+  #notif{display:none;position:absolute;right:12px;top:52px;width:340px;max-width:calc(100% - 24px);background:#fff;border:2px solid var(--teks);z-index:20;box-shadow:4px 4px 0 rgba(0,0,0,.15)}
+  #notif.buka{display:block}
+  #notif header{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid var(--garis);font-weight:600;font-size:14px}
+  #notif header button{font-size:12px;color:var(--biru);background:none;border:0;cursor:pointer;font:inherit;font-size:12px}
+  #notif .item{padding:10px 12px;border-bottom:1px solid #ddd;font-size:13px;cursor:pointer}
+  #notif .item:hover{background:#f2f7fc}
+  #notif .item.baru{background:#eef5fc;font-weight:600}
+  #notif .item small{display:block;color:var(--redup);font-weight:400;margin-top:2px}
+  #notif .kosong{padding:16px;text-align:center;color:var(--redup);font-size:13px}
+  .isi{padding:24px}
+  .layar{display:none}.layar.aktif{display:block}
+  h2{margin:0 0 16px;font-size:20px}
+  h3{margin:18px 0 10px;font-size:15px}
+  label{display:block;font-size:13px;color:var(--redup);margin:12px 0 4px}
+  input,select,textarea{width:100%;padding:10px;border:2px solid var(--garis);font:inherit;background:#fff}
+  input[type=radio]{width:auto;padding:0}
+  textarea{min-height:90px}
+  .invalid{border-color:var(--merah)!important}
+  .err{color:var(--merah);font-size:12.5px;margin-top:4px;min-height:0}
+  button.b{padding:10px 18px;border:2px solid var(--biru);background:var(--biru);color:#fff;cursor:pointer;font:inherit;font-weight:600}
+  button.s{background:#fff;color:var(--biru)}
+  button.f{background:var(--abu);color:var(--teks);border-color:var(--garis);font-weight:400}
+  button.f.on{background:var(--bar)}
+  button.b:disabled{opacity:.45;cursor:not-allowed}
+  button.tautan{all:unset;color:var(--biru);cursor:pointer;font-size:13px;text-decoration:underline}
+  button:focus-visible,tr:focus-visible,a:focus-visible,.foto:focus-within{outline:3px solid #f0a020;outline-offset:2px}
+  .baris{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .sp{justify-content:space-between}
+  .kol{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:640px){.kol{grid-template-columns:1fr}}
+  table{width:100%;border-collapse:collapse;border:2px solid var(--garis);margin-top:14px}
+  th{background:var(--bar);text-align:left}
+  th,td{padding:10px;border:1px solid var(--garis);font-size:14px}
+  tbody tr[data-id]{cursor:pointer}
+  tbody tr:hover{background:#f2f7fc}
+  tr.pilih{background:var(--bar)}
+  td.kosong{text-align:center;color:var(--redup);padding:18px}
+  .kartu{max-width:400px;margin:30px auto;border:2px solid var(--garis);padding:28px;text-align:center}
+  .kartu label{text-align:left}
+  .kartu .err{text-align:left}
+  .kartu .b{width:100%;margin-top:18px}
+  .pw{position:relative}
+  .pw input{padding-right:44px}
+  .pw button{position:absolute;right:4px;top:4px;width:38px;height:34px;border:0;background:none;cursor:pointer;font-size:18px}
+  .lupa{text-align:right;margin-top:6px}
+  .demo{margin-top:18px;border-top:1px dashed var(--garis);padding-top:12px;font-size:12.5px;color:var(--redup);text-align:left}
+  .demo table{margin-top:6px}
+  .demo th,.demo td{padding:5px 7px;font-size:12px}
+  .demo button{all:unset;color:var(--biru);cursor:pointer;text-decoration:underline}
+  .lencana{display:inline-block;padding:6px 14px;border:2px solid var(--garis);background:var(--oranye);font-size:14px}
+  .st{display:inline-block;padding:2px 9px;border:1px solid var(--garis);background:var(--abu);font-size:13px;white-space:nowrap}
+  .st-menunggudata,.st-dibukakembali{background:var(--oranye)}
+  .st-ditolak{background:#f7d4d1;border-color:var(--merah)}
+  .st-selesai,.st-ditutup{background:var(--hijau)}
+  .foto{background:var(--abu);border:2px solid var(--garis);min-height:150px;display:flex;align-items:center;justify-content:center;color:var(--redup);text-align:center;padding:10px;cursor:pointer;margin:0;font-size:14px}
+  .foto.stat{cursor:default}
+  .sr{position:absolute;opacity:0;width:1px;height:1px;overflow:hidden}
+  ul.rw{list-style:none;padding:0;margin:0}
+  ul.rw li{padding:7px 0;display:flex;gap:12px;font-size:14px}
+  ul.rw li:before{content:"";width:10px;height:10px;border-radius:50%;background:var(--biru);margin-top:5px;flex:none}
+  ul.rw li:last-child:before{background:var(--teks)}
+  ul.rw li small{display:block;color:var(--redup)}
+  ol.langkah{list-style:none;display:flex;gap:0;padding:0;margin:8px 0 14px;flex-wrap:wrap}
+  ol.langkah li{flex:1;min-width:84px;text-align:center;font-size:12px;color:var(--redup);position:relative;padding-top:30px}
+  ol.langkah li:before{content:attr(data-n);position:absolute;top:0;left:50%;transform:translateX(-50%);width:24px;height:24px;line-height:20px;border:2px solid var(--garis);border-radius:50%;background:#fff;font-size:12px;z-index:1}
+  ol.langkah li:after{content:"";position:absolute;top:11px;left:-50%;width:100%;height:2px;background:var(--garis)}
+  ol.langkah li:first-child:after{display:none}
+  ol.langkah li.done:before{background:var(--biru);border-color:var(--biru);color:#fff;content:"✓"}
+  ol.langkah li.done:after,ol.langkah li.now:after{background:var(--biru)}
+  ol.langkah li.now:before{border-color:var(--biru);color:var(--biru);font-weight:700;box-shadow:0 0 0 3px var(--bar)}
+  ol.langkah li.now{color:var(--teks);font-weight:600}
+  ol.langkah li.gagal:before{content:"✕";background:var(--merah);border-color:var(--merah);color:#fff}
+  .kotak{border:2px solid var(--garis);background:#fafafa;padding:10px 12px;font-size:14px;margin:10px 0}
+  .kotak.peringatan{background:var(--oranye);border-color:#d9a07f}
+  .kotak.bahaya{background:#fbe3e1;border-color:var(--merah)}
+  .kotak b{display:block;font-size:13px;margin-bottom:2px}
+  .angka{border:2px solid var(--garis);padding:14px;text-align:center;font-size:14px}
+  .angka b{display:block;font-size:26px}
+  .batang{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:14px}
+  .batang span.l{width:90px}.batang i{display:block;height:18px;background:var(--biru)}
+  .info{font-size:13px;color:var(--biru);margin-top:14px}
+  .bantu{font-size:12.5px;color:var(--redup);margin-top:4px}
+  .periode{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 14px;padding:10px 12px;background:var(--bar);border:1px solid var(--garis);font-size:14px}
+  .periode select{width:auto;padding:6px 10px}
+  .pil{display:flex;gap:8px;align-items:center;margin:6px 0;color:var(--teks);font-size:14px;cursor:pointer}
+  dialog{border:2px solid var(--teks);padding:22px;max-width:420px;width:calc(100% - 32px)}
+  dialog::backdrop{background:rgba(0,0,0,.35)}
+  dialog h3{margin-top:0;font-size:17px}
+  fieldset{border:0;padding:0;margin:12px 0}
+  legend{font-size:13px;color:var(--redup);padding:0}
+  #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--teks);color:#fff;padding:10px 18px;display:none;z-index:50;max-width:90%}
+</style>
+</head>
+<body>
+
+<div class="frame">
+  <div class="bar">
+    <span>Pengaduan Fasilitas Kampus</span>
+    <div class="kanan" id="kanan" hidden>
+      <span id="akun"></span>
+      <button id="lonceng" aria-label="Notifikasi" aria-expanded="false">🔔<span class="n" id="jmlNotif" hidden>0</span></button>
+      <button id="keluar">Keluar</button>
+    </div>
+  </div>
+
+  <div id="notif" role="region" aria-label="Daftar notifikasi">
+    <header>Notifikasi <button id="bacaSemua">Tandai semua dibaca</button></header>
+    <div id="listNotif"></div>
+  </div>
+
+  <div class="isi">
+
+    <!-- W1 Masuk -->
+    <section class="layar" id="w1">
+      <div class="kartu">
+        <h2>Masuk ke Sistem</h2>
+        <div style="color:var(--redup);font-size:14px">Gunakan akun kampus</div>
+
+        <!-- Langkah 1: email + sandi -->
+        <form id="modeMasuk" novalidate>
+          <label for="em">Email kampus</label>
+          <input id="em" type="email" placeholder="nama@unsulbar.ac.id" autocomplete="username">
+          <div class="err" id="errEm" role="alert"></div>
+          <label for="pw">Kata sandi</label>
+          <div class="pw">
+            <input id="pw" type="password" placeholder="••••••••" autocomplete="current-password">
+            <button type="button" id="lihatPw" aria-label="Lihat kata sandi" title="Lihat kata sandi">👁</button>
+          </div>
+          <div class="err" id="errPw" role="alert"></div>
+          <div class="lupa"><button type="button" class="tautan" id="keLupa">Lupa sandi?</button></div>
+          <button class="b" type="submit">Masuk</button>
+
+          <div class="demo">
+            Akun uji coba (khusus prototipe). Klik “isi” lalu tekan Masuk.
+            <table>
+              <thead><tr><th>Peran</th><th>Email</th><th>Sandi</th><th></th></tr></thead>
+              <tbody id="demoAkun"></tbody>
+            </table>
+          </div>
+        </form>
+
+        <!-- Langkah 2: kode verifikasi (peran staf) -->
+        <form id="modeKode" novalidate hidden>
+          <p style="font-size:14px">Akun <b id="kodeUntuk"></b> memerlukan verifikasi identitas. Masukkan kode 6 digit.</p>
+          <label for="kode">Kode verifikasi</label>
+          <input id="kode" inputmode="numeric" maxlength="6" placeholder="••••••" autocomplete="one-time-code">
+          <div class="err" id="errKode" role="alert"></div>
+          <div class="bantu" id="kodeBantu"></div>
+          <button class="b" type="submit">Verifikasi &amp; Masuk</button>
+          <div class="lupa" style="text-align:center;margin-top:12px"><button type="button" class="tautan" data-balik>← Kembali</button></div>
+        </form>
+
+        <!-- Lupa sandi -->
+        <form id="modeLupa" novalidate hidden>
+          <p style="font-size:14px">Masukkan email kampus. Tautan untuk mengatur ulang sandi akan dikirim.</p>
+          <label for="emLupa">Email kampus</label>
+          <input id="emLupa" type="email" placeholder="nama@unsulbar.ac.id">
+          <div class="err" id="errLupa" role="alert"></div>
+          <button class="b" type="submit">Kirim Tautan Reset</button>
+          <div class="lupa" style="text-align:center;margin-top:12px"><button type="button" class="tautan" data-balik>← Kembali ke Masuk</button></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- W2 Tiket Saya -->
+    <section class="layar" id="w2">
+      <div class="baris sp"><h2>Tiket Saya</h2><button class="b" data-ke="w3">+ Buat Pengaduan</button></div>
+      <div class="baris">
+        <input id="cariTiket" style="flex:1;min-width:200px" placeholder="Cari nomor tiket / lokasi" aria-label="Cari tiket">
+        <span id="filterTiket" class="baris"><button class="b f on" data-f="semua">Semua</button><button class="b f" data-f="berjalan">Berjalan</button><button class="b f" data-f="selesai">Selesai</button></span>
+      </div>
+      <table><thead><tr><th>No. Tiket</th><th>Lokasi / Kategori</th><th>Tanggal</th><th>Status</th></tr></thead>
+        <tbody id="tbW2"></tbody></table>
+      <div class="info">Klik baris untuk membuka detail dan status tiket (W4). Status di daftar dan di detail selalu sama.</div>
+    </section>
+
+    <!-- W3 Buat Pengaduan -->
+    <section class="layar" id="w3">
+      <h2>Buat Pengaduan Baru</h2>
+      <form id="fBaru" novalidate>
+        <div class="kol">
+          <div><label for="f_lok">Lokasi *</label><select id="f_lok"></select><div class="err" id="e_lok" role="alert"></div></div>
+          <div><label for="f_kat">Kategori kerusakan *</label><select id="f_kat"></select><div class="err" id="e_kat" role="alert"></div></div>
+        </div>
+        <label for="f_desk">Deskripsi kerusakan * <span id="hitung" style="float:right">0 / min. 10 karakter</span></label>
+        <textarea id="f_desk" maxlength="500" placeholder="Jelaskan kerusakan secara singkat..."></textarea>
+        <div class="err" id="e_desk" role="alert"></div>
+        <div class="kol" style="margin-top:12px">
+          <div><label>Tingkat urgensi *</label>
+            <div class="baris" id="urgensi"><button type="button" class="b f" data-u="Rendah">Rendah</button><button type="button" class="b f on" data-u="Sedang">Sedang</button><button type="button" class="b f" data-u="Tinggi">Tinggi</button></div>
+          </div>
+          <div><label for="f_foto">Foto (opsional)</label>
+            <label class="foto" style="margin:0"><input class="sr" type="file" id="f_foto" accept="image/jpeg,image/png"><span id="n_f_foto">[ pilih berkas · JPG/PNG, maks. 2 MB ]</span></label>
+            <div class="err" id="e_f_foto" role="alert"></div>
+          </div>
+        </div>
+        <div class="bantu">Tanda * wajib diisi.</div>
+        <div class="baris" style="margin-top:20px"><button class="b" type="submit">Kirim</button><button type="button" class="b s" data-ke="w2">Batal</button></div>
+      </form>
+    </section>
+
+    <!-- W3b Lengkapi Data -->
+    <section class="layar" id="w3b">
+      <h2 id="jdlLengkapi">Lengkapi Data</h2>
+      <div class="kotak peringatan"><b>Permintaan dari Admin Sarpras</b><span id="alasanMinta"></span></div>
+      <form id="fLengkapi" novalidate>
+        <label for="l_desk">Data tambahan *</label>
+        <textarea id="l_desk" maxlength="500" placeholder="Tulis informasi yang diminta admin..."></textarea>
+        <div class="err" id="e_l_desk" role="alert"></div>
+        <label for="l_foto">Foto tambahan (opsional)</label>
+        <label class="foto" style="min-height:80px"><input class="sr" type="file" id="l_foto" accept="image/jpeg,image/png"><span id="n_l_foto">[ pilih berkas · JPG/PNG, maks. 2 MB ]</span></label>
+        <div class="err" id="e_l_foto" role="alert"></div>
+        <div class="baris" style="margin-top:20px"><button class="b" type="submit">Kirim Data</button><button type="button" class="b s" id="batalLengkapi">Batal</button></div>
+        <div class="info">Setelah dikirim, tiket kembali ke status Baru dan diperiksa ulang oleh admin.</div>
+      </form>
+    </section>
+
+    <!-- W4 Detail Tiket -->
+    <section class="layar" id="w4">
+      <button class="tautan" data-ke="w2">← Kembali ke Tiket Saya</button>
+      <div class="baris sp" style="margin-top:8px"><h2 id="jdlW4"></h2><span class="lencana" id="lenW4"></span></div>
+      <div class="kol">
+        <div>
+          <p style="color:var(--redup);font-size:14px;margin-top:0" id="deskW4"></p>
+          <h3>Posisi tiket</h3>
+          <ol class="langkah" id="langkahW4"></ol>
+          <div class="kotak" id="artiW4"></div>
+          <h3>Riwayat status</h3>
+          <ul class="rw" id="rwW4"></ul>
+        </div>
+        <div id="kananW4"></div>
+      </div>
+    </section>
+
+    <!-- W5 Daftar Tiket Admin -->
+    <section class="layar" id="w5">
+      <div class="baris sp"><h2>Daftar Tiket</h2><button class="b s" data-pesan="Layar pendukung UC-07, di luar wireframe utama">Kelola Kategori &amp; Lokasi</button></div>
+      <div class="baris" id="filterAdmin">
+        <select id="aS" style="width:auto" aria-label="Filter status"></select>
+        <select id="aK" style="width:auto" aria-label="Filter kategori"></select>
+        <select id="aL" style="width:auto" aria-label="Filter lokasi"></select>
+        <select id="aP" style="width:auto" aria-label="Filter prioritas"></select>
+      </div>
+      <table><thead><tr><th>No. Tiket</th><th>Lokasi / Kategori</th><th>Pelapor</th><th>Prioritas</th><th>Status</th></tr></thead>
+        <tbody id="tbW5"></tbody></table>
+      <div class="info">Klik baris untuk membuka verifikasi dan penugasan (W6)</div>
+    </section>
+
+    <!-- W6 Verifikasi dan Penugasan -->
+    <section class="layar" id="w6">
+      <button class="tautan" data-ke="w5">← Kembali ke Daftar Tiket</button>
+      <div class="baris sp" style="margin-top:8px"><h2 id="jdlW6"></h2><span class="lencana" id="lenW6"></span></div>
+      <div class="kol">
+        <div>
+          <p style="color:var(--redup);font-size:14px;margin-top:0" id="deskW6"></p>
+          <div class="foto stat">Foto laporan</div>
+          <h3>Verifikasi</h3>
+          <div class="baris">
+            <button class="b" id="vTerima">Terima</button>
+            <button class="b s" id="vMinta">Minta Data</button>
+            <button class="b s" id="vTolak">Tolak</button>
+          </div>
+          <label for="alasan">Alasan (wajib jika Minta Data / Tolak)</label>
+          <textarea id="alasan" maxlength="300"></textarea>
+          <div class="err" id="e_alasan" role="alert"></div>
+          <div class="bantu" id="infoVerif"></div>
+        </div>
+        <div>
+          <h3 style="margin-top:0">Penugasan</h3>
+          <label for="pPrio">Prioritas</label><select id="pPrio"><option>Rendah</option><option>Sedang</option><option>Tinggi</option></select>
+          <label for="pTek">Teknisi</label><select id="pTek"><option value="">Pilih teknisi</option><option>Teknisi 1</option><option>Teknisi 2</option></select>
+          <div class="err" id="e_tek" role="alert"></div>
+          <button class="b" style="margin-top:20px" id="simpanTugas">Simpan Penugasan</button>
+          <div class="bantu" id="infoTugas"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- W7 Teknisi -->
+    <section class="layar" id="w7">
+      <h2>Tugas Saya</h2>
+      <div class="kotak"><b>Alur pengerjaan</b>Ditugaskan → Dikerjakan → Selesai. Status <b style="display:inline">Selesai</b> hanya dapat disimpan setelah catatan perbaikan diisi dan foto bukti diunggah. Pelapor otomatis mendapat notifikasi setiap status berubah.</div>
+      <div class="kol" style="grid-template-columns:1.1fr 1fr">
+        <table style="margin-top:0"><thead><tr><th>No. Tiket</th><th>Lokasi</th><th>Status</th></tr></thead>
+          <tbody id="tbW7"></tbody></table>
+        <div id="panelTugas">
+          <h3 style="margin-top:0" id="judulTugas"></h3>
+          <label for="tStatus">Status</label><select id="tStatus"></select>
+          <label for="tCatatan">Catatan perbaikan / kendala</label><textarea id="tCatatan" maxlength="300"></textarea>
+          <div class="err" id="e_tCatatan" role="alert"></div>
+          <label>Foto bukti (wajib sebelum Selesai)</label>
+          <label class="foto" style="min-height:70px"><input class="sr" type="file" id="t_foto" accept="image/jpeg,image/png"><span id="n_t_foto">[ unggah foto bukti · JPG/PNG, maks. 2 MB ]</span></label>
+          <div class="err" id="e_t_foto" role="alert"></div>
+          <button class="b" style="margin-top:16px" id="simpanProgres">Simpan</button>
+        </div>
+        <div id="kosongTugas" hidden style="color:var(--redup)">Tidak ada tugas aktif.</div>
+      </div>
+    </section>
+
+    <!-- W8 Dashboard -->
+    <section class="layar" id="w8">
+      <div class="baris sp"><h2>Dashboard Kinerja Layanan</h2><button class="b" id="bukaUnduh">Unduh Laporan</button></div>
+      <div class="periode">
+        <label for="selPeriode" style="margin:0;color:var(--teks)">Periode:</label>
+        <select id="selPeriode"><option value="minggu">Minggu ini</option><option value="bulan" selected>Bulan ini</option><option value="tri">3 bulan terakhir</option></select>
+        <span id="rentang"></span>
+      </div>
+      <div class="kol" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr))" id="angkaW8"></div>
+      <h3 id="jdlKat">Tiket per kategori</h3>
+      <div id="batangW8"></div>
+      <h3>Tiket terlama belum selesai <span style="font-weight:400;color:var(--redup);font-size:13px">(per 18 Nov 2026, semua periode)</span></h3>
+      <table style="margin-top:0"><tbody>
+        <tr><td>PGD-0005</td><td>Aula / Proyektor</td><td>12 hari</td></tr>
+        <tr><td>PGD-0008</td><td>Toilet A / Kran</td><td>9 hari</td></tr>
+      </tbody></table>
+    </section>
+
+  </div>
+</div>
+
+<!-- Dialog unduh laporan (UC-11) -->
+<dialog id="dlgUnduh">
+  <h3>Unduh Laporan Periodik</h3>
+  <fieldset><legend>Periode laporan</legend>
+    <label class="pil"><input type="radio" name="rPer" value="Mingguan" checked> Mingguan (12–18 Nov 2026)</label>
+    <label class="pil"><input type="radio" name="rPer" value="Bulanan"> Bulanan (November 2026)</label>
+  </fieldset>
+  <fieldset><legend>Format berkas</legend>
+    <label class="pil"><input type="radio" name="rFmt" value="PDF" checked> PDF</label>
+    <label class="pil"><input type="radio" name="rFmt" value="Excel"> Excel (.xlsx)</label>
+  </fieldset>
+  <div class="baris" style="justify-content:flex-end;margin-top:16px">
+    <button type="button" class="b s" id="batalUnduh">Batal</button>
+    <button type="button" class="b" id="doUnduh">Unduh</button>
+  </div>
+</dialog>
+
+<div id="toast" role="status"></div>
+
+<script>
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  let timer;
+  function pesan(t){
+    const e = $('#toast'); e.textContent = t; e.style.display = 'block';
+    clearTimeout(timer); timer = setTimeout(() => e.style.display = 'none', 2600);
+  }
+
+  /* ========== DATA & HAK AKSES ========== */
+  const AKUN = {
+    'farid@unsulbar.ac.id':         {nama:'Farid',          peran:'Pelapor',        sandi:'pelapor123'},
+    'admin.sarpras@unsulbar.ac.id': {nama:'Admin Sarpras',  peran:'Admin Sarpras',  sandi:'admin123',   kode:'482916'},
+    'teknisi1@unsulbar.ac.id':      {nama:'Teknisi 1',      peran:'Teknisi',        sandi:'teknisi123', kode:'739104'},
+    'kepala.sarpras@unsulbar.ac.id':{nama:'Kepala Sarpras', peran:'Kepala Sarpras', sandi:'kepala123',  kode:'205871'}
+  };
+  // Setiap peran hanya boleh membuka layar miliknya
+  const AKSES   = {'Pelapor':['w2','w3','w3b','w4'], 'Admin Sarpras':['w5','w6'], 'Teknisi':['w7'], 'Kepala Sarpras':['w8']};
+  const BERANDA = {'Pelapor':'w2','Admin Sarpras':'w5','Teknisi':'w7','Kepala Sarpras':'w8'};
+
+  const LOKASI   = ['Lab Komputer','Gedung A','Gedung B','Gedung C','Perpustakaan','Aula','Toilet A','Toilet B'];
+  const KATEGORI = ['AC','Lampu','Kursi / meja','Kran / air','Pintu','Proyektor'];
+  const STATUS   = ['Baru','Terverifikasi','Menunggu Data','Ditolak','Ditugaskan','Dikerjakan','Selesai','Ditutup','Dibuka Kembali'];
+  const BERJALAN = ['Baru','Terverifikasi','Menunggu Data','Ditugaskan','Dikerjakan','Dibuka Kembali'];
+  const NEXT     = {'Ditugaskan':['Dikerjakan'],'Dikerjakan':['Selesai'],'Dibuka Kembali':['Dikerjakan']};
+
+  const ARTI = {
+    'Baru':'Laporan sudah diterima dan menunggu verifikasi Admin Sarpras.',
+    'Terverifikasi':'Laporan dinyatakan valid. Admin sedang memilih teknisi untuk ditugaskan.',
+    'Menunggu Data':'Admin membutuhkan data tambahan. Tekan “Lengkapi Data” agar laporan dapat diproses.',
+    'Ditugaskan':'Teknisi sudah ditunjuk tetapi belum mulai mengerjakan.',
+    'Dikerjakan':'Teknisi sedang memperbaiki. Status berubah menjadi Selesai setelah teknisi mengunggah foto bukti.',
+    'Selesai':'Perbaikan sudah selesai. Mohon konfirmasi: tekan “Sudah Selesai” jika beres, atau “Buka Kembali” jika masih bermasalah.',
+    'Ditutup':'Kamu sudah mengonfirmasi perbaikan. Tiket ditutup.',
+    'Ditolak':'Laporan tidak dapat diproses. Lihat alasan penolakan di bawah.',
+    'Dibuka Kembali':'Tiket dibuka kembali dan menunggu teknisi mengerjakan ulang.'
+  };
+
+  const BLN = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  const p2 = n => String(n).padStart(2,'0');
+  const tgl = d => `${p2(d.getDate())} ${BLN[d.getMonth()]}`;
+  const now = () => { const d = new Date(); return `${tgl(d)} ${p2(d.getHours())}.${p2(d.getMinutes())}`; };
+
+  const tiket = [
+    {id:'PGD-0013',lokasi:'Gedung B',kategori:'Pintu',pelapor:'Putri A.',tgl:'17 Nov',prio:'—',status:'Baru',teknisi:'',
+      desk:'Engsel pintu lepas, pintu tidak bisa ditutup.',riwayat:[['Baru','17 Nov 16.20']]},
+    {id:'PGD-0012',lokasi:'Lab Komputer',kategori:'AC',pelapor:'Farid',tgl:'05 Nov',prio:'Tinggi',status:'Dikerjakan',teknisi:'Teknisi 1',
+      desk:'AC tidak dingin sejak Senin.',catatan:'',foto:'',
+      riwayat:[['Baru','05 Nov 08.10'],['Terverifikasi','05 Nov 10.30'],['Ditugaskan','05 Nov 11.00'],['Dikerjakan','06 Nov 09.15']]},
+    {id:'PGD-0011',lokasi:'Gedung C',kategori:'Lampu',pelapor:'Farid',tgl:'08 Nov',prio:'—',status:'Menunggu Data',teknisi:'',
+      desk:'Lampu koridor lantai 2 mati.',alasan:'Mohon sebutkan nomor ruangan terdekat dan sertakan foto kondisi lampu.',
+      riwayat:[['Baru','08 Nov 13.05'],['Menunggu Data','09 Nov 08.40','Admin meminta data tambahan']]},
+    {id:'PGD-0010',lokasi:'Aula',kategori:'Proyektor',pelapor:'Aksan',tgl:'04 Nov',prio:'Sedang',status:'Ditugaskan',teknisi:'Teknisi 1',
+      desk:'Proyektor tidak menyala.',catatan:'',foto:'',
+      riwayat:[['Baru','04 Nov 09.00'],['Terverifikasi','04 Nov 10.10'],['Ditugaskan','04 Nov 10.45']]},
+    {id:'PGD-0009',lokasi:'Gedung A',kategori:'Lampu',pelapor:'Farid',tgl:'02 Nov',prio:'Sedang',status:'Selesai',teknisi:'Teknisi 1',
+      desk:'Lampu ruang 3 berkedip dan padam.',catatan:'Fitting dan lampu diganti.',foto:'bukti-lampu.jpg',
+      riwayat:[['Baru','02 Nov 08.00'],['Terverifikasi','02 Nov 09.15'],['Ditugaskan','02 Nov 09.40'],['Dikerjakan','03 Nov 10.00'],['Selesai','03 Nov 13.20']]},
+    {id:'PGD-0007',lokasi:'Perpustakaan',kategori:'Kursi / meja',pelapor:'Farid',tgl:'29 Okt',prio:'Rendah',status:'Ditutup',teknisi:'Teknisi 2',
+      desk:'Kaki kursi baca patah.',catatan:'Kursi diganti.',foto:'bukti-kursi.jpg',
+      riwayat:[['Baru','29 Okt 08.00'],['Terverifikasi','29 Okt 09.00'],['Ditugaskan','29 Okt 09.30'],['Dikerjakan','30 Okt 08.30'],['Selesai','30 Okt 11.00'],['Ditutup','30 Okt 15.00']]},
+    {id:'PGD-0003',lokasi:'Toilet B',kategori:'Kran / air',pelapor:'Farid',tgl:'21 Okt',prio:'—',status:'Ditolak',teknisi:'',
+      desk:'Kran wastafel bocor.',alasan:'Duplikat dengan laporan PGD-0002 yang sudah dalam penanganan.',
+      riwayat:[['Baru','21 Okt 10.00'],['Ditolak','21 Okt 13.30','Duplikat laporan']]}
+  ];
+
+  const notifs = [
+    {untuk:'Pelapor',teks:'PGD-0011: Admin meminta data tambahan. Silakan lengkapi data.',id:'PGD-0011',waktu:'09 Nov 08.40',baca:false},
+    {untuk:'Pelapor',teks:'PGD-0012 sedang dikerjakan teknisi.',id:'PGD-0012',waktu:'06 Nov 09.15',baca:false},
+    {untuk:'Pelapor',teks:'PGD-0009 selesai diperbaiki. Mohon konfirmasi.',id:'PGD-0009',waktu:'03 Nov 13.20',baca:true},
+    {untuk:'Admin Sarpras',teks:'Tiket baru PGD-0013 dari Putri A. menunggu verifikasi.',id:'PGD-0013',waktu:'17 Nov 16.20',baca:false},
+    {untuk:'Teknisi',teks:'PGD-0010 ditugaskan kepada kamu.',id:'PGD-0010',waktu:'04 Nov 10.45',baca:false}
+  ];
+
+  const cari = id => tiket.find(t => t.id === id);
+  let sesi = null, aktifId = null, tugasId = null;
+
+  /* ========== NOTIFIKASI (UC-12) ========== */
+  function kabari(t, peran, teks){
+    if (peran === 'Pelapor' && t.pelapor !== 'Farid') return; // hanya pemilik tiket uji coba
+    notifs.unshift({untuk:peran, teks, id:t.id, waktu:now(), baca:false});
+  }
+  function setStatus(t, status, catatan){
+    t.status = status;
+    t.riwayat.push([status, now(), catatan || '']);
+  }
+  function renderNotif(){
+    if (!sesi) return;
+    const mine = notifs.filter(n => n.untuk === sesi.peran);
+    const unread = mine.filter(n => !n.baca).length;
+    const badge = $('#jmlNotif'); badge.textContent = unread; badge.hidden = unread === 0;
+    $('#listNotif').innerHTML = mine.length ? mine.map((n,i) =>
+      `<div class="item ${n.baca?'':'baru'}" tabindex="0" data-n="${notifs.indexOf(n)}">${esc(n.teks)}<small>${esc(n.waktu)}</small></div>`).join('')
+      : '<div class="kosong">Belum ada notifikasi</div>';
+  }
+  function bukaNotif(buka){
+    $('#notif').classList.toggle('buka', buka);
+    $('#lonceng').setAttribute('aria-expanded', buka);
+  }
+  $('#lonceng').onclick = e => { e.stopPropagation(); bukaNotif(!$('#notif').classList.contains('buka')); };
+  $('#bacaSemua').onclick = () => { notifs.filter(n => n.untuk === sesi.peran).forEach(n => n.baca = true); renderNotif(); };
+  $('#notif').addEventListener('click', e => {
+    e.stopPropagation();
+    const it = e.target.closest('.item'); if (!it) return;
+    const n = notifs[+it.dataset.n]; n.baca = true; renderNotif(); bukaNotif(false);
+    bukaTiketMenurutPeran(n.id);
+  });
+  document.addEventListener('click', () => bukaNotif(false));
+  function bukaTiketMenurutPeran(id){
+    if (sesi.peran === 'Pelapor') bukaW4(id);
+    else if (sesi.peran === 'Admin Sarpras') bukaW6(id);
+    else if (sesi.peran === 'Teknisi') { tugasId = id; ke('w7'); }
+  }
+
+  /* ========== NAVIGASI DENGAN PEMBATASAN HAK AKSES ========== */
+  const SEGAR = {w2:renderW2, w3:siapW3, w4:renderW4, w5:renderW5, w6:renderW6, w7:renderW7, w8:renderW8};
+  function ke(id){
+    if (!sesi && id !== 'w1'){ pesan('Silakan masuk terlebih dahulu'); id = 'w1'; }
+    else if (sesi && !(AKSES[sesi.peran] || []).includes(id)){
+      pesan('Akses ditolak: halaman ini bukan untuk peran ' + sesi.peran); return;
+    }
+    $$('.layar').forEach(l => l.classList.toggle('aktif', l.id === id));
+    $('#kanan').hidden = !sesi;
+    if (sesi) $('#akun').textContent = sesi.nama + ' · ' + sesi.peran;
+    bukaNotif(false); renderNotif();
+    if (SEGAR[id]) SEGAR[id]();
+    window.scrollTo(0, 0);
+  }
+
+  document.addEventListener('click', e => {
+    const el = e.target.closest('[data-ke],[data-pesan]');
+    if (el){ if (el.dataset.pesan) pesan(el.dataset.pesan); if (el.dataset.ke) ke(el.dataset.ke); }
+    const tr = e.target.closest('tr[data-id]'); if (tr) aksiBaris(tr);
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    const tr = e.target.closest('tr[data-id]'); if (tr) aksiBaris(tr);
+    const it = e.target.closest('#notif .item'); if (it) it.click();
+  });
+  function aksiBaris(tr){
+    const sec = tr.closest('section').id;
+    if (sec === 'w2') bukaW4(tr.dataset.id);
+    else if (sec === 'w5') bukaW6(tr.dataset.id);
+    else if (sec === 'w7'){ tugasId = tr.dataset.id; renderW7(); }
+  }
+
+  /* ========== W1 MASUK ========== */
+  const DOMAIN = '@unsulbar.ac.id';
+  let akunMenunggu = null;
+  function tampilMode(m){
+    ['modeMasuk','modeKode','modeLupa'].forEach(x => $('#'+x).hidden = x !== m);
+  }
+  function setErr(input, errEl, msg){
+    if (typeof input === 'string') input = $('#'+input);
+    if (typeof errEl === 'string') errEl = $('#'+errEl);
+    errEl.textContent = msg || ''; if (input) input.classList.toggle('invalid', !!msg);
+  }
+  $('#demoAkun').innerHTML = Object.entries(AKUN).map(([em,a]) =>
+    `<tr><td>${a.peran}</td><td>${em}</td><td>${a.sandi}</td><td><button type="button" data-isi="${em}">isi</button></td></tr>`).join('');
+  $('#demoAkun').onclick = e => {
+    const b = e.target.closest('[data-isi]'); if (!b) return;
+    $('#em').value = b.dataset.isi; $('#pw').value = AKUN[b.dataset.isi].sandi;
+    setErr('em','errEm'); setErr('pw','errPw');
+  };
+  $('#lihatPw').onclick = () => {
+    const p = $('#pw'), tampak = p.type === 'text';
+    p.type = tampak ? 'password' : 'text';
+    $('#lihatPw').textContent = tampak ? '👁' : '🙈';
+    const l = tampak ? 'Lihat kata sandi' : 'Sembunyikan kata sandi';
+    $('#lihatPw').setAttribute('aria-label', l); $('#lihatPw').title = l;
+  };
+  $('#keLupa').onclick = () => { $('#emLupa').value = $('#em').value; setErr('emLupa','errLupa'); tampilMode('modeLupa'); };
+  $$('[data-balik]').forEach(b => b.onclick = () => { akunMenunggu = null; tampilMode('modeMasuk'); });
+
+  $('#modeMasuk').onsubmit = e => {
+    e.preventDefault();
+    const em = $('#em').value.trim().toLowerCase(), pw = $('#pw').value;
+    let ok = true;
+    if (!em){ setErr('em','errEm','Email kampus wajib diisi'); ok = false; }
+    else if (!em.endsWith(DOMAIN)){ setErr('em','errEm','Gunakan email kampus berakhiran ' + DOMAIN); ok = false; }
+    else setErr('em','errEm');
+    if (!pw){ setErr('pw','errPw','Kata sandi wajib diisi'); ok = false; } else setErr('pw','errPw');
+    if (!ok) return;
+    const a = AKUN[em];
+    if (!a || a.sandi !== pw){
+      setErr('pw','errPw','Email atau kata sandi salah. Periksa kembali dan coba lagi.'); return;
+    }
+    if (a.kode){            // peran staf: verifikasi identitas tambahan
+      akunMenunggu = a;
+      $('#kodeUntuk').textContent = em;
+      $('#kode').value = ''; setErr('kode','errKode');
+      $('#kodeBantu').textContent = 'Prototipe: kode simulasi untuk akun ini adalah ' + a.kode + '.';
+      tampilMode('modeKode'); $('#kode').focus();
+    } else masuk(a);
+  };
+  $('#modeKode').onsubmit = e => {
+    e.preventDefault();
+    const k = $('#kode').value.trim();
+    if (!/^\d{6}$/.test(k)){ setErr('kode','errKode','Kode terdiri dari 6 digit angka'); return; }
+    if (k !== akunMenunggu.kode){ setErr('kode','errKode','Kode verifikasi salah'); return; }
+    masuk(akunMenunggu);
+  };
+  $('#modeLupa').onsubmit = e => {
+    e.preventDefault();
+    const em = $('#emLupa').value.trim().toLowerCase();
+    if (!em) return setErr('emLupa','errLupa','Email kampus wajib diisi');
+    if (!em.endsWith(DOMAIN)) return setErr('emLupa','errLupa','Gunakan email kampus berakhiran ' + DOMAIN);
+    setErr('emLupa','errLupa');
+    pesan('Jika email terdaftar, tautan reset sandi telah dikirim ke ' + em);
+    tampilMode('modeMasuk');
+  };
+  function masuk(a){
+    sesi = a; akunMenunggu = null;
+    $('#pw').value = ''; $('#kode').value = '';
+    tampilMode('modeMasuk');
+    pesan('Selamat datang, ' + a.nama);
+    ke(BERANDA[a.peran]);
+  }
+  $('#keluar').onclick = () => {
+    sesi = null; aktifId = null; tugasId = null;
+    $('#em').value = ''; $('#pw').value = '';
+    setErr('em','errEm'); setErr('pw','errPw');
+    ke('w1');
+  };
+
+  /* ========== FOTO: validasi tipe & ukuran ========== */
+  function cekFoto(f){
+    if (!f) return '';
+    if (!['image/jpeg','image/png'].includes(f.type)) return 'Format foto harus JPG atau PNG';
+    if (f.size > 2 * 1024 * 1024) return 'Ukuran foto maksimal 2 MB';
+    return '';
+  }
+  function ikatFoto(id){
+    const inp = $('#'+id);
+    inp.onchange = () => {
+      const f = inp.files[0], er = cekFoto(f);
+      setErr(inp.closest('label'), 'e_'+id, er);
+      if (er) inp.value = '';
+      $('#n_'+id).textContent = (f && !er) ? '✓ ' + f.name : inp.dataset.awal;
+    };
+    inp.dataset.awal = $('#n_'+id).textContent;
+  }
+  function resetFoto(id){ const i = $('#'+id); i.value = ''; $('#n_'+id).textContent = i.dataset.awal; setErr(i.closest('label'),'e_'+id); }
+  ['f_foto','l_foto','t_foto'].forEach(ikatFoto);
+
+  /* ========== W2 TIKET SAYA ========== */
+  let fTab = 'semua';
+  function renderW2(){
+    const q = $('#cariTiket').value.trim().toLowerCase();
+    const rows = tiket.filter(t => t.pelapor === sesi.nama)
+      .filter(t => fTab === 'semua' || (fTab === 'berjalan' ? BERJALAN.includes(t.status) : ['Selesai','Ditutup'].includes(t.status)))
+      .filter(t => !q || (t.id + ' ' + t.lokasi + ' ' + t.kategori).toLowerCase().includes(q));
+    $('#tbW2').innerHTML = rows.length ? rows.map(t =>
+      `<tr tabindex="0" data-id="${t.id}"><td>${t.id}</td><td>${esc(t.lokasi)} / ${esc(t.kategori)}</td><td>${t.tgl}</td><td>${badge(t.status)}</td></tr>`).join('')
+      : '<tr><td colspan="4" class="kosong">Tidak ada tiket yang cocok</td></tr>';
+  }
+  const badge = s => `<span class="st st-${s.replace(/\s/g,'').toLowerCase()}">${s}</span>`;
+  $('#filterTiket').onclick = e => {
+    const b = e.target.closest('[data-f]'); if (!b) return;
+    fTab = b.dataset.f; $$('#filterTiket .f').forEach(x => x.classList.toggle('on', x === b)); renderW2();
+  };
+  $('#cariTiket').oninput = renderW2;
+
+  /* ========== W3 BUAT PENGADUAN (validasi lengkap) ========== */
+  let urg = 'Sedang';
+  function isiSelect(sel, awal, arr){ sel.innerHTML = `<option value="">${awal}</option>` + arr.map(x => `<option>${x}</option>`).join(''); }
+  function siapW3(){
+    isiSelect($('#f_lok'), 'Pilih gedung / ruang', LOKASI);
+    isiSelect($('#f_kat'), 'Pilih kategori', KATEGORI);
+    $('#f_desk').value = ''; $('#hitung').textContent = '0 / min. 10 karakter';
+    ['f_lok','f_kat','f_desk'].forEach(i => setErr(i,'e_'+(i==='f_lok'?'lok':i==='f_kat'?'kat':'desk')));
+    resetFoto('f_foto');
+    urg = 'Sedang'; $$('#urgensi .f').forEach(b => b.classList.toggle('on', b.dataset.u === 'Sedang'));
+  }
+  $('#urgensi').onclick = e => {
+    const b = e.target.closest('[data-u]'); if (!b) return;
+    urg = b.dataset.u; $$('#urgensi .f').forEach(x => x.classList.toggle('on', x === b));
+  };
+  $('#f_desk').oninput = e => { $('#hitung').textContent = e.target.value.trim().length + ' / min. 10 karakter'; };
+  $('#fBaru').onsubmit = e => {
+    e.preventDefault();
+    let ok = true;
+    const lok = $('#f_lok').value, kat = $('#f_kat').value, des = $('#f_desk').value.trim();
+    if (!lok){ setErr('f_lok','e_lok','Lokasi wajib dipilih'); ok = false; } else setErr('f_lok','e_lok');
+    if (!kat){ setErr('f_kat','e_kat','Kategori wajib dipilih'); ok = false; } else setErr('f_kat','e_kat');
+    if (!des){ setErr('f_desk','e_desk','Deskripsi wajib diisi'); ok = false; }
+    else if (des.length < 10){ setErr('f_desk','e_desk','Deskripsi terlalu singkat (minimal 10 karakter)'); ok = false; }
+    else setErr('f_desk','e_desk');
+    const f = $('#f_foto').files[0], fe = cekFoto(f);
+    if (fe){ setErr($('#f_foto').closest('label'),'e_f_foto',fe); ok = false; }
+    if (!ok){ pesan('Periksa kembali isian yang bertanda merah'); return; }
+    const id = 'PGD-' + String(Math.max(...tiket.map(t => +t.id.slice(4))) + 1).padStart(4,'0');
+    const t = {id, lokasi:lok, kategori:kat, pelapor:sesi.nama, tgl:now().slice(0,6), prio:'—', urgensi:urg, status:'Baru', teknisi:'',
+      desk:des, fotoLapor:f ? f.name : '', riwayat:[['Baru', now()]]};
+    tiket.unshift(t);
+    kabari(t, 'Admin Sarpras', `Tiket baru ${id} (urgensi ${urg}) menunggu verifikasi.`);
+    pesan('Tiket terkirim, status Baru');
+    bukaW4(id);
+  };
+
+  /* ========== W3b LENGKAPI DATA ========== */
+  function bukaLengkapi(id){
+    aktifId = id; const t = cari(id);
+    $('#jdlLengkapi').textContent = `Lengkapi Data · ${t.id} · ${t.lokasi} / ${t.kategori}`;
+    $('#alasanMinta').textContent = t.alasan || '-';
+    $('#l_desk').value = ''; setErr('l_desk','e_l_desk'); resetFoto('l_foto');
+    ke('w3b');
+  }
+  $('#batalLengkapi').onclick = () => bukaW4(aktifId);
+  $('#fLengkapi').onsubmit = e => {
+    e.preventDefault();
+    const d = $('#l_desk').value.trim(); let ok = true;
+    if (d.length < 10){ setErr('l_desk','e_l_desk', d ? 'Data tambahan terlalu singkat (minimal 10 karakter)' : 'Data tambahan wajib diisi'); ok = false; } else setErr('l_desk','e_l_desk');
+    const f = $('#l_foto').files[0], fe = cekFoto(f);
+    if (fe){ setErr($('#l_foto').closest('label'),'e_l_foto',fe); ok = false; }
+    if (!ok) return;
+    const t = cari(aktifId);
+    t.desk += ' [Data tambahan: ' + d + ']'; t.alasan = '';
+    setStatus(t, 'Baru', 'Data dilengkapi, kembali ke verifikasi');
+    kabari(t, 'Admin Sarpras', `${t.id}: pelapor sudah melengkapi data, siap diverifikasi ulang.`);
+    pesan('Data terkirim, tiket kembali ke status Baru');
+    bukaW4(t.id);
+  };
+
+  /* ========== W4 DETAIL TIKET (satu sumber data = konsisten dengan W2) ========== */
+  function bukaW4(id){ aktifId = id; ke('w4'); }
+  function renderW4(){
+    const t = cari(aktifId); if (!t) return ke('w2');
+    $('#jdlW4').textContent = `${t.id} · ${t.lokasi} / ${t.kategori}`;
+    $('#lenW4').textContent = t.status;
+    $('#lenW4').className = 'lencana';
+    $('#deskW4').textContent = 'Deskripsi: ' + t.desk;
+
+    // Stepper
+    let steps = ['Baru','Terverifikasi','Ditugaskan','Dikerjakan','Selesai','Ditutup'], now_, gagal = false;
+    if (t.status === 'Ditolak'){ steps = ['Baru','Ditolak']; now_ = 1; gagal = true; }
+    else {
+      const pos = {'Menunggu Data':'Baru','Dibuka Kembali':'Ditugaskan'}[t.status] || t.status;
+      now_ = steps.indexOf(pos);
+      if (t.status === 'Ditutup') now_ = steps.length;
+    }
+    $('#langkahW4').innerHTML = steps.map((s,i) => {
+      const c = gagal && i === 1 ? 'gagal now' : i < now_ ? 'done' : i === now_ ? 'now' : '';
+      return `<li class="${c}" data-n="${i+1}">${s}</li>`;
+    }).join('');
+    $('#artiW4').innerHTML = `<b>Status saat ini: ${t.status}</b>${esc(ARTI[t.status])}` +
+      (t.teknisi && ['Ditugaskan','Dikerjakan','Dibuka Kembali'].includes(t.status) ? `<br>Teknisi: ${esc(t.teknisi)}` : '');
+    $('#rwW4').innerHTML = t.riwayat.map(r => `<li><div>${r[0]} — ${r[1]}${r[2] ? `<small>${esc(r[2])}</small>` : ''}</div></li>`).join('');
+
+    // Panel kanan: bergantung status
+    let h = '';
+    if (t.foto) h += `<div class="foto stat">Foto bukti perbaikan<br><small>(${esc(t.foto)})</small></div>`;
+    else h += `<div class="foto stat">${['Selesai','Ditutup'].includes(t.status) ? 'Tidak ada foto bukti' : 'Foto bukti perbaikan akan tampil di sini setelah teknisi menyelesaikan pekerjaan'}</div>`;
+    if (t.catatan) h += `<p style="color:var(--redup);font-size:13px">Catatan teknisi: ${esc(t.catatan)}</p>`;
+    if (t.status === 'Ditolak') h += `<div class="kotak bahaya"><b>Alasan penolakan</b>${esc(t.alasan || '-')}</div>`;
+    if (t.status === 'Menunggu Data') h += `<div class="kotak peringatan"><b>Permintaan admin</b>${esc(t.alasan || '-')}</div>`;
+    h += '<div class="baris">';
+    if (t.status === 'Selesai') h += '<button class="b" id="aTutup">Sudah Selesai</button><button class="b s" id="aBuka">Buka Kembali</button>';
+    else if (t.status === 'Menunggu Data') h += '<button class="b" id="aLengkapi">Lengkapi Data</button>';
+    else if (t.status === 'Ditolak') h += '<button class="b" data-ke="w3">+ Buat Pengaduan Baru</button>';
+    h += '</div>';
+    if (t.status === 'Selesai') h += `<div id="bukaPanel" hidden><label for="alasanBuka">Alasan membuka kembali (wajib)</label><textarea id="alasanBuka" maxlength="300"></textarea><div class="err" id="e_alasanBuka" role="alert"></div><button class="b" id="kirimBuka" style="margin-top:10px">Kirim</button></div><div class="info">Konfirmasi → tiket Ditutup</div>`;
+    $('#kananW4').innerHTML = h;
+
+    const q = id => $('#'+id);
+    if (q('aTutup')) q('aTutup').onclick = () => {
+      setStatus(t, 'Ditutup', 'Dikonfirmasi pelapor');
+      kabari(t, 'Admin Sarpras', `${t.id} dikonfirmasi selesai oleh pelapor dan ditutup.`);
+      pesan('Tiket Ditutup'); ke('w2');
+    };
+    if (q('aBuka')) q('aBuka').onclick = () => { q('bukaPanel').hidden = false; q('alasanBuka').focus(); };
+    if (q('kirimBuka')) q('kirimBuka').onclick = () => {
+      const a = q('alasanBuka').value.trim();
+      if (!a) return setErr('alasanBuka','e_alasanBuka','Alasan wajib diisi');
+      setStatus(t, 'Dibuka Kembali', a);
+      kabari(t, 'Admin Sarpras', `${t.id} dibuka kembali oleh pelapor: ${a}`);
+      if (t.teknisi) kabari(t, 'Teknisi', `${t.id} dibuka kembali, mohon dikerjakan ulang.`);
+      pesan('Status: Dibuka Kembali'); ke('w2');
+    };
+    if (q('aLengkapi')) q('aLengkapi').onclick = () => bukaLengkapi(t.id);
+  }
+
+  /* ========== W5 DAFTAR TIKET ADMIN ========== */
+  function siapFilterAdmin(){
+    if ($('#aS').options.length) return;
+    isiSelect($('#aS'),'Status: semua',STATUS); isiSelect($('#aK'),'Kategori: semua',KATEGORI);
+    isiSelect($('#aL'),'Lokasi: semua',LOKASI); isiSelect($('#aP'),'Prioritas: semua',['Tinggi','Sedang','Rendah']);
+    ['aS','aK','aL','aP'].forEach(i => $('#'+i).onchange = renderW5);
+  }
+  function renderW5(){
+    siapFilterAdmin();
+    const s = $('#aS').value, k = $('#aK').value, l = $('#aL').value, p = $('#aP').value;
+    const rows = tiket.filter(t => (!s || t.status === s) && (!k || t.kategori === k) && (!l || t.lokasi === l) && (!p || t.prio === p));
+    $('#tbW5').innerHTML = rows.length ? rows.map(t =>
+      `<tr tabindex="0" data-id="${t.id}"><td>${t.id}</td><td>${esc(t.lokasi)} / ${esc(t.kategori)}</td><td>${esc(t.pelapor)}</td><td>${t.prio}</td><td>${badge(t.status)}</td></tr>`).join('')
+      : '<tr><td colspan="5" class="kosong">Tidak ada tiket yang cocok dengan filter</td></tr>';
+  }
+
+  /* ========== W6 VERIFIKASI & PENUGASAN ========== */
+  let w6Id = null;
+  function bukaW6(id){ w6Id = id; ke('w6'); }
+  function renderW6(){
+    const t = cari(w6Id); if (!t) return ke('w5');
+    $('#jdlW6').textContent = `${t.id} · ${t.lokasi} / ${t.kategori}`;
+    $('#lenW6').textContent = t.status; $('#lenW6').className = 'lencana';
+    $('#deskW6').textContent = 'Deskripsi: ' + t.desk + (t.urgensi ? ` (urgensi pelapor: ${t.urgensi})` : '');
+    $('#alasan').value = ''; setErr('alasan','e_alasan'); setErr('pTek','e_tek');
+    const verif = t.status === 'Baru';
+    ['vTerima','vMinta','vTolak'].forEach(i => $('#'+i).disabled = !verif);
+    $('#infoVerif').textContent = verif ? 'Terima, minta data tambahan, atau tolak tiket ini.'
+      : (t.status === 'Menunggu Data' ? 'Menunggu pelapor melengkapi data.' : 'Verifikasi sudah dilakukan. Status: ' + t.status + '.') + (t.alasan ? ' Alasan: ' + t.alasan : '');
+    const boleh = ['Terverifikasi','Ditugaskan','Dibuka Kembali'].includes(t.status);
+    $('#simpanTugas').disabled = !boleh; $('#pPrio').disabled = !boleh; $('#pTek').disabled = !boleh;
+    $('#pPrio').value = t.prio === '—' ? 'Sedang' : t.prio; $('#pTek').value = t.teknisi || '';
+    $('#infoTugas').textContent = boleh ? '' : 'Penugasan tersedia setelah tiket berstatus Terverifikasi.';
+  }
+  $('#vTerima').onclick = () => {
+    const t = cari(w6Id); setStatus(t,'Terverifikasi');
+    kabari(t,'Pelapor',`${t.id} terverifikasi. Menunggu penugasan teknisi.`);
+    pesan('Status: Terverifikasi'); renderW6();
+  };
+  function verifAlasan(status, kirim){
+    const t = cari(w6Id), a = $('#alasan').value.trim();
+    if (!a) return setErr('alasan','e_alasan','Alasan wajib diisi untuk ' + (status === 'Ditolak' ? 'Tolak' : 'Minta Data'));
+    t.alasan = a; setStatus(t, status, a);
+    kabari(t,'Pelapor', kirim + ' Alasan: ' + a);
+    pesan('Status: ' + status); ke('w5');
+  }
+  $('#vMinta').onclick = () => verifAlasan('Menunggu Data', `${cari(w6Id).id}: admin meminta data tambahan.`);
+  $('#vTolak').onclick = () => verifAlasan('Ditolak', `${cari(w6Id).id} ditolak.`);
+  $('#simpanTugas').onclick = () => {
+    const t = cari(w6Id), tek = $('#pTek').value;
+    if (!tek) return setErr('pTek','e_tek','Pilih teknisi terlebih dahulu');
+    t.prio = $('#pPrio').value; t.teknisi = tek;
+    setStatus(t, 'Ditugaskan', 'Teknisi: ' + tek);
+    kabari(t,'Pelapor',`${t.id} ditugaskan kepada ${tek}.`);
+    kabari(t,'Teknisi',`${t.id} ditugaskan kepada kamu.`);
+    pesan('Status: Ditugaskan'); ke('w5');
+  };
+
+  /* ========== W7 TEKNISI ========== */
+  function tugasSaya(){ return tiket.filter(t => t.teknisi === sesi.nama && Object.keys(NEXT).includes(t.status)); }
+  function renderW7(){
+    const list = tugasSaya();
+    if (!list.find(t => t.id === tugasId)) tugasId = list[0]?.id || null;
+    $('#tbW7').innerHTML = list.length ? list.map(t =>
+      `<tr tabindex="0" data-id="${t.id}" class="${t.id === tugasId ? 'pilih' : ''}"><td>${t.id}</td><td>${esc(t.lokasi)}</td><td>${badge(t.status)}</td></tr>`).join('')
+      : '<tr><td colspan="3" class="kosong">Tidak ada tugas aktif</td></tr>';
+    $('#panelTugas').hidden = !tugasId; $('#kosongTugas').hidden = !!tugasId;
+    if (!tugasId) return;
+    const t = cari(tugasId);
+    $('#judulTugas').textContent = `${t.id} · ${t.lokasi} / ${t.kategori}`;
+    $('#tStatus').innerHTML = [t.status, ...NEXT[t.status]].map(s => `<option>${s}</option>`).join('');
+    $('#tCatatan').value = t.catatan || ''; setErr('tCatatan','e_tCatatan'); resetFoto('t_foto');
+    if (t.foto) $('#n_t_foto').textContent = 'Foto tersimpan: ' + t.foto + ' (pilih berkas untuk mengganti)';
+  }
+  $('#simpanProgres').onclick = () => {
+    const t = cari(tugasId), st = $('#tStatus').value, cat = $('#tCatatan').value.trim();
+    const f = $('#t_foto').files[0], fe = cekFoto(f);
+    setErr('tCatatan','e_tCatatan'); setErr($('#t_foto').closest('label'),'e_t_foto', fe);
+    if (fe) return;
+    if (st === 'Selesai'){
+      if (!cat) return setErr('tCatatan','e_tCatatan','Catatan perbaikan wajib diisi sebelum Selesai');
+      if (!f && !t.foto) return setErr($('#t_foto').closest('label'),'e_t_foto','Foto bukti wajib diunggah sebelum Selesai');
+    }
+    t.catatan = cat; if (f) t.foto = f.name;
+    if (st !== t.status){
+      setStatus(t, st, cat);
+      kabari(t,'Pelapor', st === 'Selesai' ? `${t.id} selesai diperbaiki. Mohon konfirmasi.` : `${t.id} sedang dikerjakan teknisi.`);
+      kabari(t,'Admin Sarpras', `${t.id} berubah status menjadi ${st}.`);
+      pesan('Status diperbarui: ' + st);
+    } else pesan('Progres tersimpan');
+    renderW7(); renderNotif();
+  };
+
+  /* ========== W8 DASHBOARD (dengan periode) ========== */
+  const DASH = {
+    minggu:{rentang:'12–18 Nov 2026',masuk:6,berjalan:3,selesai:2,ditolak:1,avg:'1,8 hari',kat:[['AC',3],['Lampu',1],['Kursi / meja',1],['Kran / air',1]]},
+    bulan: {rentang:'1–18 Nov 2026', masuk:24,berjalan:9,selesai:13,ditolak:2,avg:'2,4 hari',kat:[['AC',9],['Lampu',7],['Kursi / meja',5],['Kran / air',3]]},
+    tri:   {rentang:'Sep–Nov 2026',  masuk:61,berjalan:11,selesai:46,ditolak:4,avg:'2,9 hari',kat:[['AC',22],['Lampu',17],['Kursi / meja',12],['Kran / air',10]]}
+  };
+  const NAMA_P = {minggu:'Minggu ini',bulan:'Bulan ini',tri:'3 bulan terakhir'};
+  function renderW8(){
+    const k = $('#selPeriode').value, d = DASH[k];
+    $('#rentang').textContent = 'Rentang data: ' + d.rentang;
+    $('#angkaW8').innerHTML =
+      `<div class="angka"><b>${d.masuk}</b>Tiket masuk</div><div class="angka"><b>${d.berjalan}</b>Berjalan</div>` +
+      `<div class="angka"><b>${d.selesai}</b>Selesai</div><div class="angka"><b>${d.ditolak}</b>Ditolak</div>` +
+      `<div class="angka"><b>${d.avg}</b>Rata-rata waktu penyelesaian</div>`;
+    $('#jdlKat').textContent = `Tiket per kategori · ${NAMA_P[k]} (${d.rentang})`;
+    const mx = Math.max(...d.kat.map(x => x[1]));
+    $('#batangW8').innerHTML = d.kat.map(([n,v]) =>
+      `<div class="batang"><span class="l">${n}</span><i style="width:${Math.round(v/mx*60)}%"></i>${v}</div>`).join('');
+  }
+  $('#selPeriode').onchange = renderW8;
+
+  const dlg = $('#dlgUnduh');
+  $('#bukaUnduh').onclick = () => dlg.showModal();
+  $('#batalUnduh').onclick = () => dlg.close();
+  $('#doUnduh').onclick = () => {
+    const per = $('input[name=rPer]:checked').value, fmt = $('input[name=rFmt]:checked').value;
+    dlg.close(); pesan(`Laporan ${per.toLowerCase()} (${fmt}) sedang diunduh`);
+  };
+
+  ke('w1');
+</script>
+</body>
+</html>
